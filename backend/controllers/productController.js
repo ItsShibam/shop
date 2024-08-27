@@ -95,13 +95,13 @@ const createProductReview = asyncHandler(async (req, res) => {
   const { comment, rating } = req.body;
   const product = await Product.findById(req.params.id);
 
-
   if (product) {
     // Check if the product is already reviewed by this user
-    const alreadyReviewed = product.reviews.find(
-      (review) => review.user.toString() === req.user._id.toString()
-    );
+    const alreadyReviewed = product.reviews.find((review) => {
+      return review.user.toString() === req.user._id.toString();
+    });
 
+  
     if (alreadyReviewed) {
       return res.status(400).json({ message: "Product is already reviewed" });
     }
@@ -151,5 +151,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   createProductReview,
-  getTopProducts
+  getTopProducts,
 };

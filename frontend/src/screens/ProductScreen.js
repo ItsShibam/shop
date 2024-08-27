@@ -50,12 +50,16 @@ const ProductScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      await createReview({ productId, rating, comment });
+      const response = await createReview({ productId, rating, comment });
       setRating(0);
       setComment("");
       await refetch();
+      if (response?.data) toast.success(response?.data?.message);
+      else if (response?.error) {
+        throw new Error(response?.error?.data?.message);
+      }
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      toast.error(err.message || "An unexpected error occured!");
     }
   };
   return (
